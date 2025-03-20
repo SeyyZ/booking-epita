@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -28,9 +30,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests(auth -> auth
-                // Step 3: add authorization
-                .anyRequest().permitAll()
+            .requestMatchers("/dashboard").hasRole("ADMIN")
+            .anyRequest().permitAll()
             )
+            .formLogin(withDefaults())
+            .logout(logout -> logout.logoutUrl("/logout").permitAll())
             // Step 3: Add login form
             .csrf((csrf) -> csrf
                 .ignoringRequestMatchers("/h2-console/*")
@@ -40,5 +44,25 @@ public class SecurityConfiguration {
     }
 
     // Step 3: add InMemoryUserDetailsManager
+    @Bean
+    public UserDetailsService users() {
+        UserDetails adminUser = User.builder()
+            .username("admin")
+            .password("$2a$10$7ae/9XQgjnIlCBb.WKt.J.5NpQlgNFboX9DED5NUxotMz3KjhjTq6") 
+            .roles("ADMIN")
+            .build();
 
+        UserDetails regularUser = User.builder()
+            .username("user")
+            .password("$2a$10$CrOAhJpAqaJ6rk7TYML7W.uBTol1ugCZs2yqdD1YXY3AKK46OV5qO")
+            .roles("USER")
+            .build();
+
+        return new InMemoryUserDetailsManager(adminUser, regularUser);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
