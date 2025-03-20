@@ -48,21 +48,16 @@ public class SecurityConfiguration {
     public UserDetailsService users() {
         UserDetails adminUser = User.builder()
             .username("admin")
-            .password("$2a$10$7ae/9XQgjnIlCBb.WKt.J.5NpQlgNFboX9DED5NUxotMz3KjhjTq6") 
+            .password("{bcrypt}$2a$10$NBSzmliyfosnI2YL7AF.4ebyMViZqqwPE8axz2kP0EJ6DKemy2Qfy") 
             .roles("ADMIN")
             .build();
 
         UserDetails regularUser = User.builder()
             .username("user")
-            .password("$2a$10$CrOAhJpAqaJ6rk7TYML7W.uBTol1ugCZs2yqdD1YXY3AKK46OV5qO")
+            .password("{bcrypt}$2a$10$NBSzmliyfosnI2YL7AF.4ebyMViZqqwPE8axz2kP0EJ6DKemy2Qfy")
             .roles("USER")
             .build();
 
         return new InMemoryUserDetailsManager(adminUser, regularUser);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
