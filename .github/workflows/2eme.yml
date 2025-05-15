@@ -39,7 +39,7 @@ jobs:
 
      
       - name: Compare results with OSV Reporter
-        uses: google/osv-scanner-action/osv-reporter-action@v1.0.0
+        uses: google/osv-scanner-action/osv-reporter-action@main
         with:
           base-results: base-results.json
           head-results: head-results.json
