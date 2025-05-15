@@ -17,16 +17,15 @@ jobs:
       - name: Checkout PR branch (HEAD)
         uses: actions/checkout@v4
 
-      - name: Set up Git to access base branch
-        run: git fetch origin ${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
-        
       - name: Run OSV Scanner on PR HEAD
         uses: google/osv-scanner-action/osv-scanner-action@8dded7155905cd666190a12dc9997000e58d163d # v2.0.        
         with:
-          scan-args: '--format json --output head-results.json ./app'
+          scan-args: '--format=json --output=head-results.json ./app'
         continue-on-error: true
+        
+      - name: Set up Git to access base branch
+        run: git fetch origin ${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
 
-    
       - name: Checkout base branch (BASE)
         run: |
           git checkout ${{ github.base_ref }}
@@ -34,7 +33,7 @@ jobs:
       - name: Run OSV Scanner on BASE
         uses: google/osv-scanner-action/osv-scanner-action@8dded7155905cd666190a12dc9997000e58d163d # v2.0.        
         with:
-          scan-args: '--format json --output base-results.json ./app'
+          scan-args: '--format=json --output=base-results.json ./app'
         continue-on-error: true
 
      
