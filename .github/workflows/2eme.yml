@@ -23,7 +23,7 @@ jobs:
       - name: Run OSV Scanner on PR HEAD
         uses: google/osv-scanner-action/osv-scanner-action@8dded7155905cd666190a12dc9997000e58d163d # v2.0.        
         with:
-          scan-args: '. --format json --output head-results.json'
+          scan-args: '--format json --output head-results.json ./app'
         continue-on-error: true
 
     
@@ -34,7 +34,7 @@ jobs:
       - name: Run OSV Scanner on BASE
         uses: google/osv-scanner-action/osv-scanner-action@8dded7155905cd666190a12dc9997000e58d163d # v2.0.        
         with:
-          scan-args: '. --format json --output base-results.json'
+          scan-args: '--format json --output base-results.json ./app'
         continue-on-error: true
 
      
