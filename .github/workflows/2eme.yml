@@ -70,10 +70,10 @@ jobs:
   
       - name: Run Semgrep with diff comparison
         run: |
-          semgrep ci \
+          semgrep scan \
             --config "p/java" \
             --sarif --output semgrep.sarif \
-            --baseline-ref origin/${{ github.base_ref }}
+            --baseline-commit origin/${{ github.base_ref }}
   
       - name: Upload Semgrep SARIF to GitHub Security Dashboard
         uses: github/codeql-action/upload-sarif@v3
